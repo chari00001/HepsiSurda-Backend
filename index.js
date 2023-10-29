@@ -1,19 +1,24 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const pool = require("./config/database");
+const usersRoute = require("./routes/usersRoute");
+const productsRoute = require("./routes/productsRoute");
 
 const app = express();
 
-app.get('/users', async (req, res) => {
-    try {
-      const result = await pool.query('SELECT * FROM users');
-      res.json(result.rows);
-    } catch (error) {
-      console.error('Veritabanı hatası:', error);
-      res.status(500).json({ error: 'Veritabanı hatası' });
-    }
-  });
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.listen(3000, () => {
-  console.log("server has started on port 5000");
+app.use("/users", usersRoute);
+app.use("/products", productsRoute);
+
+app.get("/", async (req, res) => {
+  res.send("Hello World!");
+});
+
+app.listen(8080, () => {
+  console.log("server has started on port 8080");
 });
