@@ -1,9 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
 const pool = require("./config/database");
+
 const usersRoute = require("./routes/usersRoute");
 const productsRoute = require("./routes/productsRoute");
+const authRoute = require("./routes/authRoute");
 
 const app = express();
 
@@ -14,6 +17,7 @@ app.use(bodyParser.json());
 
 app.use("/users", usersRoute);
 app.use("/products", productsRoute);
+app.use("/auth", authRoute);
 
 app.get("/", async (req, res) => {
   res.send("Hello World!");

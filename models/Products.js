@@ -1,8 +1,8 @@
 const pool = require("../config/database");
 
 class Product {
-  async create({ name, price, description, image }) {
-    const query = `INSERT INTO products (name, price, description, image) VALUES ('${name}', '${price}', '${description}', '${image}');`;
+  async create({ name, type, price, description, image }) {
+    const query = `INSERT INTO products (name, type, price, description, image) VALUES ('${name}','${type}', '${price}', '${description}', '${image}');`;
 
     try {
       const { rows } = await pool.query(query);
@@ -20,19 +20,19 @@ class Product {
   }
 
   async findOne(id) {
-    const query = `SELECT * FROM products WHERE id = ${id};`;
+    const query = `SELECT * FROM products WHERE product_id = ${id};`;
     const { rows } = await pool.query(query);
     return rows[0];
   }
 
-  async update(id, { name, price, description, image }) {
-    const query = `UPDATE products SET name = '${name}', price = '${price}', description = '${description}', image = '${image}' WHERE id = ${id};`;
+  async update(id, { name, type, price, description, image }) {
+    const query = `UPDATE products SET name = '${name}', price = '${price}', type = '${type}' ,description = '${description}', image = '${image}' WHERE product_id = ${id};`;
     const { rows } = await pool.query(query);
     return rows[0];
   }
 
   async delete(id) {
-    const query = `DELETE FROM products WHERE id = ${id};`;
+    const query = `DELETE FROM products WHERE product_id = ${id};`;
     const { rows } = await pool.query(query);
     return rows[0];
   }
