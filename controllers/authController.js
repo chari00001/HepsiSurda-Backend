@@ -1,17 +1,19 @@
-const User = require("../models");
-const bcrypt = require("bcryptjs");
+const User = require("../models/Users");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(505).json({ error: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(505).json({ error: "Invalid credentials" });
     }
@@ -20,31 +22,36 @@ const login = async (req, res) => {
       expiresIn: "1d",
     });
 
-    res.status(200).json({ token: token });
+    res.status(200).json({ user, token, message: "Login successful" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 const register = async (req, res) => {
   try {
-    const { email, telno, password, name, username } = req.body;
+    const { email, telno, password, name, surname } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    const isExist = User.findOne({ email });
+    if (isExist) {
+      return res.status(400).json({ error: "User already exists" });
+    }
 
     const user = await User.create({
       email,
       telno,
       password: hashedPassword,
       name,
-      username,
+      surname,
     });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    // const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+    //   expiresIn: "1d",
+    // });
 
-    res.status(201).json({ token: token });
+    res.status(201).json({ user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
