@@ -31,13 +31,15 @@ const register = async (req, res) => {
   try {
     const { email, telno, password, name, surname } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Check if the user already exists
+    const isExist = await User.findOne({ email });
 
-    const isExist = User.findOne({ email });
     if (isExist) {
       return res.status(400).json({ error: "User already exists" });
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await User.create({
       email,
