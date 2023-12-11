@@ -1,15 +1,23 @@
 const Cart = require("../models/Cart");
 
 const addToCart = async (req, res) => {
-  const { product_id, amount } = req.body;
+  const { user_id, product_id, amount, quantity } = req.body;
   try {
     const cartItem = await Cart.create({
+      user_id,
       product_id,
       amount,
+      quantity,
     });
-    res.status(201).json(cartItem);
+    console.log(cartItem);
+    res.status(201).json({
+      message: "Item added to cart successfully",
+      status: "OK",
+      cartItem,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error adding item to cart:", error);
+    res.status(500).json({ error: "Failed to add item to cart" });
   }
 };
 
@@ -47,10 +55,4 @@ module.exports = {
   getAllCartItems,
   getCartItemById,
   getAllCartItemsByUserId,
-};
-
-module.exports = {
-  addToCart,
-  getAllCartItems,
-  getCartItemById,
 };

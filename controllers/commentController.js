@@ -1,4 +1,4 @@
-const Comment = require("../models/Comment");
+const Comment = require("../models/Comments");
 
 const addComment = async (req, res) => {
   const { text, user_id, product_id } = req.body;
