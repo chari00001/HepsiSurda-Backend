@@ -21,8 +21,8 @@ class Cart {
     }
   }
 
-  async findAll() {
-    const query = "SELECT * FROM carts;";
+  async findAll(id) {
+    const query = `SELECT * FROM carts WHERE user_id = ${id};`;
     const { rows } = await pool.query(query);
     return rows;
   }
@@ -39,16 +39,28 @@ class Cart {
     return rows[0];
   }
 
+  async updateQuantity(id, quantity) {
+    const query = `UPDATE carts SET quantity = ${quantity} WHERE cart_id = ${id};`;
+    const result = await pool.query(query);
+    return result;
+  }
+
   async delete(id) {
-    const query = `DELETE FROM carts WHERE cart_id = ${id};`;
+    const query = `DELETE FROM carts WHERE cart_id = ${id} RETURNING *;`;
     const { rows } = await pool.query(query);
     return rows[0];
   }
 
+  async deleteAllByUserId(id) {
+    const query = `DELETE FROM carts WHERE user_id = ${id} RETURNING *;`;
+    const result = await pool.query(query);
+    return result;
+  }
+
   async findByUserAndProduct(user_id, product_id) {
     const query = `SELECT * FROM carts WHERE user_id = '${user_id}' AND product_id = '${product_id}';`;
-    const { rows } = await pool.query(query);
-    return rows[0];
+    const result = await pool.query(query);
+    return result;
   }
 }
 

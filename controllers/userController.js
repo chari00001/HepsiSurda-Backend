@@ -10,8 +10,6 @@ const createUser = async (req, res) => {
   }
 };
 
-// create all crud functions for user here
-
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
@@ -24,11 +22,13 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({
-      where: { id: id },
-    });
+    const user = await User.findOne(id);
     if (user) {
-      return res.status(200).json(user);
+      return res.status(200).json({
+        message: "User found",
+        data: user,
+        status: "OK",
+      });
     }
     res.status(404).send("User with the specified ID does not exists");
   } catch (error) {
@@ -39,11 +39,15 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const [updated] = await User.update(req.body, {
-      where: { id: id },
+    const { name, surname, email, telno } = req.body;
+    const updated = await User.update(id, {
+      name,
+      surname,
+      email,
+      telno,
     });
     if (updated) {
-      const updatedUser = await User.findOne({ where: { id: id } });
+      const updatedUser = await User.findOne(id);
       return res.status(200).json(updatedUser);
     }
     throw new Error("User not found");

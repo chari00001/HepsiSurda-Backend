@@ -42,9 +42,46 @@ const getCartItemById = async (req, res) => {
 
 const getAllCartItemsByUserId = async (req, res) => {
   try {
-    const { user_id } = req.params;
-    const cartItems = await Cart.findAll({ where: { user_id } });
+    const { userId } = req.params;
+    const cartItems = await Cart.findAll(userId);
     res.status(200).json(cartItems);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteCartItemById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Cart.delete(id);
+    if (deleted) {
+      return res.status(204).json({ message: "Item deleted successfully" });
+    }
+    throw new Error("Cart item not found");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteAllCartItemsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const deleted = await Cart.deleteAllByUserId(userId);
+    if (deleted) {
+      return res.status(204).json({ message: "Items deleted successfully" });
+    }
+    throw new Error("Cart items not found");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateCartItemQuantity = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+    const cartItem = await Cart.updateQuantity(id, quantity);
+    res.status(200).json(cartItem);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -55,4 +92,7 @@ module.exports = {
   getAllCartItems,
   getCartItemById,
   getAllCartItemsByUserId,
+  deleteCartItemById,
+  deleteAllCartItemsByUserId,
+  updateCartItemQuantity,
 };
