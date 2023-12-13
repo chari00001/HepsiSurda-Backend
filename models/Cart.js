@@ -44,7 +44,6 @@ class Cart {
     const result = await pool.query(query);
     return result;
   }
-
   async delete(id) {
     const query = `DELETE FROM carts WHERE cart_id = ${id} RETURNING *;`;
     const { rows } = await pool.query(query);
