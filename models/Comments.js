@@ -2,7 +2,7 @@ const pool = require("../config/database");
 
 class Comment {
   async create({ text, user_id, product_id }) {
-    const query = `INSERT INTO comments (text, user_id, product_id) VALUES ('${text}', '${user_id}', '${product_id}');`;
+    const query = `INSERT INTO comments (text, user_id, product_id) VALUES ('${text}', '${user_id}', '${product_id}') RETURNING *;`;
 
     try {
       const { rows } = await pool.query(query);
@@ -31,6 +31,12 @@ class Comment {
     return rows[0];
   }
 
+  async updateRating(id, { rating }) {
+    const query = `UPDATE comments SET rating = '${rating}' WHERE comment_id = ${id};`;
+    const { rows } = await pool.query(query);
+    return rows[0];
+  }
+
   async delete(id) {
     const query = `DELETE FROM comments WHERE comment_id = ${id};`;
     const { rows } = await pool.query(query);
@@ -41,6 +47,12 @@ class Comment {
     const query = `SELECT * FROM comments WHERE text = '${text}';`;
     const { rows } = await pool.query(query);
     return rows[0];
+  }
+
+  async findByProductId(id) {
+    const query = `SELECT * FROM comments WHERE product_id = $1;`;
+    const { rows } = await pool.query(query, [id]);
+    return rows;
   }
 }
 

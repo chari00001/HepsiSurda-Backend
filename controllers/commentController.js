@@ -8,7 +8,9 @@ const addComment = async (req, res) => {
       user_id,
       product_id,
     });
-    res.status(201).json(comment);
+    return await res.status(201).json({
+      message: "Comment added successfully",
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -33,8 +35,31 @@ const getCommentById = async (req, res) => {
   }
 };
 
+const getCommentByProductId = async (req, res) => {
+  try {
+    const { product_id } = req.params;
+    const comments = await Comment.findByProductId(product_id);
+    res.status(200).json(comments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateCommentRating = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating } = req.body;
+    const comment = await Comment.updateRating(id, { rating });
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addComment,
   getAllComments,
   getCommentById,
+  getCommentByProductId,
+  updateCommentRating,
 };
