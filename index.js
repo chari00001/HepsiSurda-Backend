@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const path = require("path");
 
 const pool = require("./config/database");
 
@@ -11,6 +12,7 @@ const authRoute = require("./routes/authRoute");
 const commentsRoute = require("./routes/commentsRoute");
 const ordersRoute = require("./routes/ordersRoute");
 const cartsRoute = require("./routes/cartsRoute");
+const uploadRoute = require("./routes/uploadRoute");
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use("/auth", authRoute);
 app.use("/comments", commentsRoute);
 app.use("/orders", ordersRoute);
 app.use("/carts", cartsRoute);
+app.use("/uploads", uploadRoute);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", async (req, res) => {
   res.send("Hello World!");

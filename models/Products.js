@@ -1,11 +1,13 @@
 const pool = require("../config/database");
 
 class Product {
-  async create({ name, type, price, description, image }) {
-    const query = `INSERT INTO products (name, type, price, description, image) VALUES ('${name}','${type}', '${price}', '${description}', '${image}');`;
+  async create({ name, type, price, description, image, features, rating }) {
+    const query = `INSERT INTO products (name, type, price, description, image, features, rating) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`;
+
+    const values = [name, type, price, description, image, features, rating];
 
     try {
-      const { rows } = await pool.query(query);
+      const { rows } = await pool.query(query, values);
       return rows[0];
     } catch (error) {
       console.error("Error creating product:", error);
@@ -25,10 +27,30 @@ class Product {
     return rows[0];
   }
 
-  async update(id, { name, type, price, description, image }) {
-    const query = `UPDATE products SET name = '${name}', price = '${price}', type = '${type}' ,description = '${description}', image = '${image}' WHERE product_id = ${id};`;
-    const { rows } = await pool.query(query);
-    return rows[0];
+  async update(
+    id,
+    { name, type, price, description, image, features, rating }
+  ) {
+    const query = `UPDATE products SET name = $1, type = $2, price = $3, description = $4, image = $5, features = $6, rating = $7 WHERE product_id = $8 RETURNING *;`;
+
+    const values = [
+      name,
+      type,
+      price,
+      description,
+      image,
+      features,
+      rating,
+      id,
+    ];
+
+    try {
+      const { rows } = await pool.query(query, values);
+      return rows[0];
+    } catch (error) {
+      console.error("Error updating product:", error);
+      throw error;
+    }
   }
 
   async delete(id) {
