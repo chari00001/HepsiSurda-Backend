@@ -1,10 +1,10 @@
 const pool = require("../config/database");
 
 class Cart {
-  async create({ user_id, product_id, amount, quantity }) {
+  async create({ user_id, product_id, amount, quantity, features }) {
     const query = `
-          INSERT INTO carts (user_id, product_id, amount, quantity)
-          VALUES ($1, $2, $3, $4)
+          INSERT INTO carts (user_id, product_id, amount, quantity, features)
+          VALUES ($1, $2, $3, $4, $5)
           RETURNING *;`;
 
     try {
@@ -13,6 +13,7 @@ class Cart {
         product_id,
         amount,
         quantity,
+        features,
       ]);
       return result.rows[0];
     } catch (error) {

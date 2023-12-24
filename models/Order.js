@@ -45,9 +45,15 @@ class Order {
   }
 
   async findOne(id) {
-    const query = `SELECT * FROM orders WHERE order_id = ${id};`;
+    const query = `SELECT * FROM orders WHERE order_id = '${id}';`;
     const { rows } = await pool.query(query);
     return rows[0];
+  }
+
+  async findByUserId(id) {
+    const query = `SELECT * FROM orders WHERE user_id = '${id}';`;
+    const { rows } = await pool.query(query);
+    return rows;
   }
 
   async update(

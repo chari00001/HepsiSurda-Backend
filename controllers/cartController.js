@@ -1,13 +1,15 @@
 const Cart = require("../models/Cart");
 
 const addToCart = async (req, res) => {
-  const { user_id, product_id, amount, quantity } = req.body;
+  const { user_id, product_id, amount, quantity, features } = req.body;
+
   try {
     const cartItem = await Cart.create({
       user_id,
       product_id,
       amount,
       quantity,
+      features,
     });
     console.log(cartItem);
     res.status(201).json({

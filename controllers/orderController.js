@@ -39,8 +39,8 @@ const getAllOrders = async (req, res) => {
 
 const getOrderByUserId = async (req, res) => {
   try {
-    const { id } = req.params;
-    const order = await Order.findOne({ where: { user_id: id } });
+    const { userId } = req.params;
+    const order = await Order.findByUserId(userId);
     res.status(200).json(order);
   } catch (error) {
     res.status(500).json({ error: error.message });
