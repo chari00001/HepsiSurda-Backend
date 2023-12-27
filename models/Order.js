@@ -5,6 +5,7 @@ class Order {
     user_id,
     products,
     total_price,
+    delivery_method,
     delivery_address,
     payment_method,
     order_state,
@@ -14,11 +15,12 @@ class Order {
             user_id,
             products,
             total_price,
+            delivery_method,
             delivery_address,
             payment_method,
             order_state
           ) VALUES (
-            $1, $2, $3, $4, $5, $6
+            $1, $2, $3, $4, $5, $6, $7
           )
           RETURNING *;`;
 
@@ -27,6 +29,7 @@ class Order {
         user_id,
         products,
         total_price,
+        delivery_method,
         delivery_address,
         payment_method,
         order_state,
@@ -63,6 +66,7 @@ class Order {
       products,
       total_price,
       order_date,
+      delivery_method,
       delivery_address,
       payment_method,
       order_state,
@@ -73,6 +77,7 @@ class Order {
         products = '${products}',
         total_price = '${total_price}',
         order_date = '${order_date}',
+        delivery_method = '${delivery_method}',
         delivery_address = '${delivery_address}',
         payment_method = '${payment_method}',
         order_state = '${order_state}' WHERE order_id = ${id};`;
