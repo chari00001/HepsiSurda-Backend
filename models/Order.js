@@ -68,7 +68,7 @@ class Order {
       order_date,
       delivery_method,
       delivery_address,
-      payment_method,
+      payment_method, 
       order_state,
     }
   ) {

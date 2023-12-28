@@ -14,6 +14,7 @@ const ordersRoute = require("./routes/ordersRoute");
 const cartsRoute = require("./routes/cartsRoute");
 const uploadRoute = require("./routes/uploadRoute");
 const ratingRoute = require("./routes/ratingRoute");
+const repliesRoute = require("./routes/repliesRoute");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/users", usersRoute);
 app.use("/products", productsRoute);
 app.use("/auth", authRoute);
 app.use("/comments", commentsRoute);
+app.use("/replies", repliesRoute);
 app.use("/orders", ordersRoute);
 app.use("/carts", cartsRoute);
 app.use("/ratings", ratingRoute);
