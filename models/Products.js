@@ -1,10 +1,30 @@
 const pool = require("../config/database");
 
 class Product {
-  async create({ name, type, price, description, image, features, rating }) {
-    const query = `INSERT INTO products (name, type, price, description, image, features, rating) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`;
+  async create({
+    name,
+    type,
+    price,
+    description,
+    image,
+    features,
+    rating,
+    campaign = false,
+    discountPercent = 0,
+  }) {
+    const query = `INSERT INTO products (name, type, price, description, image, features, rating, campaign, discountPercent) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`;
 
-    const values = [name, type, price, description, image, features, rating];
+    const values = [
+      name,
+      type,
+      price,
+      description,
+      image,
+      features,
+      rating,
+      campaign,
+      discountPercent,
+    ];
 
     try {
       const { rows } = await pool.query(query, values);
@@ -29,9 +49,19 @@ class Product {
 
   async update(
     id,
-    { name, type, price, description, image, features, rating }
+    {
+      name,
+      type,
+      price,
+      description,
+      image,
+      features,
+      rating,
+      campaign,
+      discountPercent,
+    }
   ) {
-    const query = `UPDATE products SET name = $1, type = $2, price = $3, description = $4, image = $5, features = $6, rating = $7 WHERE product_id = $8 RETURNING *;`;
+    const query = `UPDATE products SET name = $1, type = $2, price = $3, description = $4, image = $5, features = $6, rating = $7, campaign = $8, discountPercent = $9 WHERE product_id = $10 RETURNING *;`;
 
     const values = [
       name,
@@ -41,6 +71,8 @@ class Product {
       image,
       features,
       rating,
+      campaign,
+      discountPercent,
       id,
     ];
 

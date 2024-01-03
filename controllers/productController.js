@@ -1,7 +1,16 @@
 const Product = require("../models/Products");
 
 const addProduct = async (req, res) => {
-  const { name, type, price, description, features, rating } = req.body;
+  const {
+    name,
+    type,
+    price,
+    description,
+    features,
+    rating,
+    campaign,
+    discountPercent,
+  } = req.body;
   let imagePath = null;
 
   if (req.file) {
@@ -17,6 +26,8 @@ const addProduct = async (req, res) => {
       image: imagePath,
       features,
       rating,
+      campaign,
+      discountPercent,
     });
 
     res.status(201).json(product);

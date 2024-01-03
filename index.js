@@ -16,6 +16,7 @@ const uploadRoute = require("./routes/uploadRoute");
 const ratingRoute = require("./routes/ratingRoute");
 const repliesRoute = require("./routes/repliesRoute");
 const couponsRoute = require("./routes/couponsRoute");
+const comparisonRoute = require("./routes/comparisonRoute");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use("/orders", ordersRoute);
 app.use("/carts", cartsRoute);
 app.use("/ratings", ratingRoute);
 app.use("/coupons", couponsRoute);
+app.use("/comparisons", comparisonRoute);
 app.use("/uploads", uploadRoute);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
