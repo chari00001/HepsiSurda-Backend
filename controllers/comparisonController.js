@@ -68,14 +68,15 @@ const deleteComparisonById = async (req, res) => {
 const updateComparison = async (req, res) => {
   try {
     const { id } = req.params;
-    const { productid_1, productid_2, user_id, isactive } = req.body;
-    console.log(productid_1, productid_2, user_id, isactive);
+    const { productid_1, productid_2, user_id, isactive } =
+      req.body.updatedData;
     const comparison = await Comparison.update(id, {
       productid_1,
       productid_2,
       user_id,
       isactive,
     });
+    console.log(comparison);
     res.status(200).json(comparison);
   } catch (error) {
     res.status(500).json({ error: error.message });
